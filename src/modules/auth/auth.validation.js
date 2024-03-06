@@ -10,6 +10,7 @@ const signUpVal=joi.object({
 
 
 
+
 const signinVal=joi.object({
     email:joi.string().required().trim().email(),
     password:joi.string().pattern(/^(?=.*[a-zA-Z].*)(?=.*[!#\$%&\?].*).{8,}$/).required().min(8),

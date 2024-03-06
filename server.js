@@ -7,11 +7,12 @@ import { dbConnection } from './database/dbConnection.js'
 import { bootstrap } from "./src/modules/genre/index.route.js";
 import schedule from "node-schedule"
 import { userModel } from "./database/models/user.model.js";
-
+import cors from "cors"
 dotenv.config()
 const app = express()
 const port = 3000
 dbConnection()
+app.use(cors())
 app.use(express.json())
 app.use("/uploads",express.static("uploads"))
 bootstrap(app)
