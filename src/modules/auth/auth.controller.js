@@ -48,7 +48,7 @@ const changePassword=async(req,res,next)=>{
     let user=await userModel.findById(req.user._id)
     if(!user) return next(new AppError(`this user not fount`,404))
     if(!bcrypt.compareSync(req.body.oldPassword,user.password)) {
-        return next(new AppError(`wrong password`))
+        return next(new AppError(`wrong password`,404))
     }
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
 
@@ -87,7 +87,8 @@ const resetPassword=catchError(async(req,res,next)=>{
     const user=await userModel.findOne({email:req.body.email})
     if(!user) return next(new AppError(`this email not found`,404))
     if(!(user.forgetCode==req.body.forgetCode))return next(new AppError(`check your forget Code again it is invalid`))
-    await userModel.findOneAndUpdate({email:req.body.email},{password:req.body.newPassword,passwordChangedAt:Date.now()},{new:true})
+    let hashPass=bcrypt.hashSync(req.body.password,8)
+    await userModel.findOneAndUpdate({email:req.body.email},{password:hashPass,passwordChangedAt:Date.now()},{new:true})
     res.json({message:"your password has changed"})
 }
 )
