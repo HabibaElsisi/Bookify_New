@@ -21,7 +21,7 @@ const signin = catchError(async (req, res,next) => {
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
         if(!user.verifyEmail){
              sendEmail(user.email)
-            return  next(new AppError(`verify email first`,401))
+            return  next(new AppError(`verify email first ..check your gmail`,401))
              
             }
             let token = jwt.sign({ userId: user._id,role:user.role },process.env.JWT_KEY)

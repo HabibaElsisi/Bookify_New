@@ -18,11 +18,12 @@ const schema = new mongoose.Schema({
         ref:"user"
     }
 }, { timestamps: true })
-schema.post("init",function(doc){
-    if(doc.imgCover){
-    doc.imgCover=process.env.baseURL +"uploads/"+ doc.imgCover
+schema.post("init",function(){
+    if(this.image){
+    this.image=process.env.baseURL +"uploads/"+ this.image
     }
 })
+
 schema.post("save",function(){
     this.image=process.env.baseURL +"uploads/"+ this.image
 })

@@ -65,7 +65,8 @@ schema.virtual("myReviews",{
 });
 
 schema.pre("findOne",function(){
-    console.log(this.populate("myReviews"))
+    this.populate({path: 'myReviews',
+    select: 'text rate createdAt -_id'})
 })
 
 

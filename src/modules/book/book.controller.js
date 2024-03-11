@@ -88,7 +88,7 @@ const updateBook=catchError(async(req,res,next)=>{
         req.body.slug=slugify(req.body.title)
     }
     if(req.file){
-        req.body.imgCover=req.files.filename
+        req.body.imgCover=req.file.filename
     }
         
     let book= await bookModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
