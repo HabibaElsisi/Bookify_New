@@ -11,7 +11,7 @@ import Randomstring from "randomstring"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
-    sendEmail(req.body.email)
+    sendEmail(req.body.email,req.body.name)
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
     res.json({message:"signUp successfully",token})
 })
@@ -20,7 +20,7 @@ const signin = catchError(async (req, res,next) => {
     let user = await userModel.findOne({ email: req.body.email })
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
         if(!user.verifyEmail){
-             sendEmail(user.email)
+             sendEmail(user.email,user.name)
             return  next(new AppError(`verify email first ..check your gmail`,401))
              
             }

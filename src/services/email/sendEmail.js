@@ -2,7 +2,7 @@ import nodemailer from "nodemailer"
 import jwt from "jsonwebtoken"
 import { emailTemplate } from "./emailTemplate.js";
 
-export const sendEmail=async(email)=>{
+export const sendEmail=async(email,name)=>{
 
     const transporter = nodemailer.createTransport({
         service:"gmail",
@@ -14,10 +14,10 @@ export const sendEmail=async(email)=>{
 let token=jwt.sign({email},"mynameishabiba")
 
       const info = await transporter.sendMail({
-        from: '"Route Node.js" <habibamsisi@gmail.com>', // sender address
+        from: '"Bookify" <habibamsisi@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Hello ✔", // Subject line
-        html:emailTemplate(token)
+        html:emailTemplate(token,name)
       });
     
       console.log("Message sent: %s", info.messageId);

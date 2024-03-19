@@ -1,6 +1,6 @@
 
 
-export function emailTemplate(email){
+export function emailTemplate(email,name){
 	return `
 	
 	<!-- © 2018 Shift Technologies. All rights reserved. -->
@@ -49,7 +49,7 @@ export function emailTemplate(email){
 										</tr>
 										<tr>
 											<td style="padding-bottom: 5px; padding-left: 20px; padding-right: 20px;" align="center" valign="top" class="mainTitle">
-												<h2 class="text" style="color:#000;font-family:Poppins,Helvetica,Arial,sans-serif;font-size:28px;font-weight:500;font-style:normal;letter-spacing:normal;line-height:36px;text-transform:none;text-align:center;padding:0;margin:0">Hi "John Doe"</h2>
+												<h2 class="text" style="color:#000;font-family:Poppins,Helvetica,Arial,sans-serif;font-size:28px;font-weight:500;font-style:normal;letter-spacing:normal;line-height:36px;text-transform:none;text-align:center;padding:0;margin:0">Hi "${name}"</h2>
 											</td>
 										</tr>
 										<tr>
@@ -63,7 +63,7 @@ export function emailTemplate(email){
 													<tbody>
 														<tr>
 															<td style="padding-bottom: 20px;" align="center" valign="top" class="description">
-																<p class="text" style="color:#666;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:22px;text-transform:none;text-align:center;padding:0;margin:0">Thanks for subscribe for the Vespro newsletter. Please click confirm button for subscription to start receiving our emails.</p>
+																<p class="text" style="color:#666;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:22px;text-transform:none;text-align:center;padding:0;margin:0">Thanks for subscribe for the Bookify. Please click confirm button for subscription to start receiving our emails.</p>
 															</td>
 														</tr>
 													</tbody>
