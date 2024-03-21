@@ -39,6 +39,11 @@ const schema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:"genre"
     },
+    language:{
+        type:mongoose.Types.ObjectId,
+        ref:"language"
+
+    },
     createdBy:{
         type:mongoose.Types.ObjectId,
         ref:"user"

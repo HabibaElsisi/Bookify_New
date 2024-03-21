@@ -17,6 +17,7 @@ const addBookVal=joi.object({
     }).required(),
     bookContent:joi.string().uri().required(),
     genre:joi.string().hex().length(24).required(),
+    language:joi.string().hex().length(24).required(),
     author:joi.string().hex().length(24).required(),
     createdBy:joi.string().hex().length(24).optional(),
     
@@ -45,6 +46,7 @@ const updateBookVal=joi.object({
     bookContent:joi.string().uri(),
     genre:joi.string().hex().length(24),
     author:joi.string().hex().length(24).optional(),
+    language:joi.string().hex().length(24).optional(),
     createdBy:joi.string().hex().length(24).optional(),
 })
 
