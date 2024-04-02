@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 const schema= new mongoose.Schema({
-    languageName:{
+    language:{
         type:String,
         require:true,
     }

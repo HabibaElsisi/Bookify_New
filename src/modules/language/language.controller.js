@@ -5,7 +5,7 @@ import { ApiFeature } from "../../utils/apiFeatures.js"
 import { deleteOne } from "../handlers/handle.js"
 
 const addLanguage=catchError(async(req,res,next)=>{
-    let languageExists=await languageModel.findOne({languageName:req.body.language})
+    let languageExists=await languageModel.findOne({language:req.body.language})
     if(languageExists) return next(new AppError(`this language exists`,404))
     let language= new languageModel(req.body)
     await language.save()
@@ -15,7 +15,7 @@ const addLanguage=catchError(async(req,res,next)=>{
 const getAllLanguages=catchError(async(req,res,next)=>{
     let apifeature=new ApiFeature(languageModel.find(),req.query).fields().filter().sort().pagination().search()
     let languages=await apifeature.mongooseQuery
-    res.json({message:"this is all languages"},languages,apifeature.pageNumber)
+    res.json({message:"this is all languages",languages,page:apifeature.pageNumber})
 })
 
 

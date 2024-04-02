@@ -35,6 +35,9 @@ const getAllBooks=catchError(async(req,res,next)=>{
     if(req.params.id){
         filterObj.genre=req.params.id
     }
+    if(req.params.language){
+        filterObj.language=req.params.language
+    }
     let apiFeature=new ApiFeature(bookModel.find(filterObj),req.query)
     .fields().filter().pagination().search().sort()
     let book = await apiFeature.mongooseQuery
