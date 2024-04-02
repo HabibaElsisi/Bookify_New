@@ -8,6 +8,7 @@ import { AppError } from "../../utils/AppError.js"
 import { sendEmail } from "../../services/email/sendEmail.js"
 import { userModel } from "../../../database/models/user.model.js"
 import Randomstring from "randomstring"
+import { sendOTPEmail } from "../../services/OTPCode/sendOTP_InEmail.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
@@ -77,8 +78,9 @@ const forgetPassword=catchError(async(req,res,next)=>{
     charset:"numeric",
     length:5
 })
+sendOTPEmail(user.email,forgetCode)
     await  userModel.findOneAndUpdate({email:req.body.email},{forgetCode})
-    return res.json({message: "your OTP generated successfully"})
+    return res.json({message: "your OTP generated successfully...check your email"})
 
 })
 
