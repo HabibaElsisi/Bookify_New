@@ -89,6 +89,8 @@ const updateBook=catchError(async(req,res,next)=>{
     }
     if(req.body.title){
         req.body.slug=slugify(req.body.title)
+        let isBookExists = await bookModel.findOne({ $and: [{ title: req.body.title }, { _id: { $ne: req.params.id } }] });
+        if(isBookExists)return next(new AppError(`this book already exists`,404))
     }
     if(req.file){
         req.body.imgCover=req.file.filename

@@ -5,6 +5,8 @@ import { ApiFeature } from "../../utils/apiFeatures.js"
 import { deleteOne } from "../handlers/handle.js"
 
 const addAuthor=catchError(async(req,res,next)=>{
+let isAuthorExists=await authorModel.findOne({name:req.body.name})
+if(isAuthorExists)return next(new AppError(`this author already exists`,404))
     req.body.image=req.file.filename
    req.body.addedBy=req.user._id
     let author= new authorModel(req.body)
@@ -23,9 +25,14 @@ const getAllAuthors=catchError(async(req,res,next)=>{
 const updateAuthors=catchError(async(req,res,next)=>{
     let author= await authorModel.findById(req.params.id)
     if(!author) return next(new AppError("author not found",401))
-    if(!(req.user._id.toString()==author.addedBy.toString()))return next(new AppError(`you are not allowed to update this author`,401))
+   // if(!(req.user._id.toString()==author.addedBy.toString()))return next(new AppError(`you are not allowed to update this author`,401))
     if(req.file){
         req.body.image=req.file.filename
+    }
+    if(req.body.name)
+    {
+        let isAuthorExists = await authorModel.findOne({ $and: [{ name: req.body.name }, { _id: { $ne: req.params.id } }] });
+        if(isAuthorExists)return next(new AppError(`this author already exists`,404))
     }
     let updatedAuthor= await authorModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
     res.json({message:"Author updated successfully",updatedAuthor})

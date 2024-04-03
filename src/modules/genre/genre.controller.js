@@ -34,6 +34,8 @@ const getSingleGenre=catchError(async(req,res,next)=>{
 const updateGenre=catchError(async(req,res,next)=>{
     if(req.body.name){
         req.body.slug=slugify(req.body.name)
+        let isGenreExists = await genreModel.findOne({ $and: [{ name: req.body.name }, { _id: { $ne: req.params.id } }] });
+        if(isGenreExists)return next(new AppError(`this genre already exists`,404))
     }
      if(req.file){ 
         req.body.image=req.file.filename
