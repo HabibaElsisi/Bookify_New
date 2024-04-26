@@ -8,12 +8,24 @@ import { bootstrap } from "./src/modules/genre/index.route.js";
 import schedule from "node-schedule"
 import { userModel } from "./database/models/user.model.js";
 import cors from "cors"
+import { fetchBookRecommendations } from './fast.js'; // Corrected import statement
 dotenv.config()
 const app = express()
 const port = 3000
 dbConnection()
+
+const bookName = 'Gilead';
+fetchBookRecommendations(bookName)
+    .then(recommendedBooks => {
+        console.log('Recommended books:', recommendedBooks);
+    })
+    .catch(error => {
+        // Handle errors
+    });
+
 app.use(cors())
 app.use(express.json())
+
 app.use("/uploads",express.static("uploads"))
 bootstrap(app)
 const cron=()=>{
