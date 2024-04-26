@@ -8,20 +8,29 @@ import { bootstrap } from "./src/modules/genre/index.route.js";
 import schedule from "node-schedule"
 import { userModel } from "./database/models/user.model.js";
 import cors from "cors"
-import { fetchBookRecommendations } from './fast.js'; // Corrected import statement
+
 dotenv.config()
 const app = express()
 const port = 3000
 dbConnection()
+app.post('/recommend', async (req, res) => {
+    try {
+        const { book_name } = req.body; // Extract the book_name from the request body
+        if (!book_name) {
+            return res.status(400).json({ error: 'Book name is required' });
+        }
 
-const bookName = 'Gilead';
-fetchBookRecommendations(bookName)
-    .then(recommendedBooks => {
-        console.log('Recommended books:', recommendedBooks);
-    })
-    .catch(error => {
-        // Handle errors
-    });
+        // Call the fetchBookRecommendations function with the book_name
+        const recommendedBooks = await fetchBookRecommendations(book_name);
+
+        // Send the recommended books as the response
+        res.json({ recommended_books: recommendedBooks });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 app.use(cors())
 app.use(express.json())
