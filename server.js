@@ -8,6 +8,7 @@ import { bootstrap } from "./src/modules/genre/index.route.js";
 import schedule from "node-schedule"
 import { userModel } from "./database/models/user.model.js";
 import cors from "cors"
+import { fetchBookRecommendations } from "./fast.js";
 
 dotenv.config()
 const app = express()
