@@ -26,8 +26,8 @@ const signin = catchError(async (req, res,next) => {
              
             }
             let token = jwt.sign({ userId: user._id,role:user.role },process.env.JWT_KEY)
-            user.isActive=true
-            await user.save()
+            
+            await userModel.findOneAndUpdate({email:req.body.email},{isActive:true})
         return res.json({ message: "login Successfully", token })
     }
 
