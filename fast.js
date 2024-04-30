@@ -1,63 +1,30 @@
-// import axios from 'axios';
+import fetch from 'node-fetch';
 
-// // Define the URL of your FastAPI endpoint
-// // const apiUrl = 'http://localhost:3000/recommend'; // Update with the actual URL of your FastAPI endpoint
+const baseUrl = 'http://127.0.0.1:8000';
 
-// // Define the book name to be recommended
+const fetchBookRecommendations = async (bookName) => {
+    const url = `${baseUrl}/recommend`;
+    const requestBody = { book_name: bookName };
 
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-// // Define an asynchronous function to fetch book recommendations
-// const fetchBookRecommendations = async (bookName) => {
-//     try {
-//         // Make a POST request to the FastAPI endpoint
-//         const response = await axios.post('https://bookify-new.onrender.com/recommend', { book_name: bookName });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-//         // Return the recommended books from the response
-//         return response.data.recommended_books;
-//     } catch (error) {
-//         // Handle errors
-//         console.error('Error fetching book recommendations:', error.message);
-//         throw error; // Re-throw the error to handle it further upstream
-//     }
-// };
+        const responseData = await response.json();
+        return responseData.recommended_books;
+    } catch (error) {
+        console.error('Error fetching book recommendations:', error.message);
+        throw error;
+    }
+};
 
-// export { fetchBookRecommendations };
-
-
-
-
-
-
-// import fetch from 'node-fetch';
-
-// // Define the input data for the recommendation request
-// const inputData = {
-//     book_name: 'Your Book Name Here' // Replace 'Your Book Name Here' with the actual book name
-// };
-
-// // Define the URL of the FastAPI endpoint
-// const apiUrl = 'http://localhost:8000/recommend'; // Replace 'http://localhost:8000/recommend' with the actual URL of your FastAPI endpoint
-
-// // Make a POST request to the FastAPI endpoint
-// fetch(apiUrl, {
-//     method: 'POST',
-//     body: JSON.stringify(inputData),
-//     headers: { 'Content-Type': 'application/json' }
-// })
-// .then(response => {
-//     // Check if the response status is OK (HTTP 200)
-//     if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//     }
-//     // Parse the JSON response
-//     return response.json();
-// })
-// .then(data => {
-//     // Handle the response from the FastAPI endpoint
-//     console.log('Recommended Books:', data.recommended_books);
-// })
-// .catch(error => {
-//     // Handle errors
-//     console.error('Error:', error);
-// });
-
+export { fetchBookRecommendations };
