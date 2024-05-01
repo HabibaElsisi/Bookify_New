@@ -9,7 +9,7 @@ const addLanguage=catchError(async(req,res,next)=>{
     if(languageExists) return next(new AppError(`this language exists`,404))
     let language= new languageModel(req.body)
     await language.save()
-    res.json({message:"language addedd successfully"})    
+    res.json({message:"language addedd successfully",language})    
 })
 
 const getAllLanguages=catchError(async(req,res,next)=>{
