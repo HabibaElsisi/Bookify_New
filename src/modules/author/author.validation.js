@@ -18,7 +18,7 @@ const addAuthorVal=joi.object({
 const updateAuthorVal=joi.object({
     id:joi.string().hex().length(24).required(),
     name:joi.string().trim().min(2).max(50),
-    brief:joi.string().trim().min(20).max(200),
+    brief:joi.string().trim().min(20).max(1500),
     image:joi.object({
         fieldname:joi.string(),
         originalname:joi.string(),
