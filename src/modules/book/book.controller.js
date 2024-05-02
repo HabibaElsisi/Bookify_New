@@ -11,6 +11,7 @@ import { authorModel } from "../../../database/models/author.model.js"
 import { userModel } from "../../../database/models/user.model.js"
 import { historyModel } from "../../../database/models/history.model.js"
 import { reviewModel } from "../../../database/models/review.model.js"
+import { fetchBookRecommendations } from "../../../fast.js"
 
 
 
@@ -37,21 +38,36 @@ const addBook=catchError(async(req,res,next)=>{
     res.json({message:"Book added successfully",book})
 })
 
-const getAllBooks=catchError(async(req,res,next)=>{
-    let filterObj={}
-    if(req.params.id){
-        filterObj.genre=req.params.id
+const getAllBooks = catchError(async (req, res, next) => {
+    let filterObj = {};
+    if (req.params.id) {
+        filterObj.genre = req.params.id;
     }
-    if(req.params.language){
-        filterObj.language=req.params.language
+    if (req.params.language) {
+        filterObj.language = req.params.language;
     }
-    let apiFeature=new ApiFeature(bookModel.find(filterObj),req.query)
-    .fields().filter().pagination().search().sort()
-    let book = await apiFeature.mongooseQuery
 
-    res.json({message:"this is all Books",page:apiFeature.pageNumber,book})
+    let apiFeature = new ApiFeature(bookModel.find(filterObj), req.query)
+        .fields().filter().pagination().search().sort();
+    
+    let books = await apiFeature.mongooseQuery;
 
-})
+    let recommendedBooks = [];
+    if (req.query.keyword) {
+        let bookName = req.query.keyword;
+        recommendedBooks = await fetchBookRecommendations(bookName);
+
+        let recommendedBooksFromDB = await bookModel.find({ title: { $in: recommendedBooks.map(book => book.title) } });
+        let booksNotInRecommended = books.filter(book => !recommendedBooks.map(recBook => recBook.title).includes(book.title));
+        books = recommendedBooksFromDB.concat(booksNotInRecommended);
+    }
+
+    return res.json({ message: "These are all Books", page: apiFeature.pageNumber, books });
+});
+
+
+
+
 const getSingleBook=catchError(async(req,res,next)=>{
     let book= await bookModel.findById(req.params.id).populate({
         path: 'author',

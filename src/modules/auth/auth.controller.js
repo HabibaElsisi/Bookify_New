@@ -12,7 +12,7 @@ import { sendOTPEmail } from "../../services/OTPCode/sendOTP_InEmail.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
-    sendEmail(req.body.email,req.body.name)
+    // sendEmail(req.body.email,req.body.name)
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
     res.json({message:"signUp successfully",token})
 })
@@ -20,11 +20,11 @@ const signUp=catchError(async(req,res,next)=>{
 const signin = catchError(async (req, res,next) => {
     let user = await userModel.findOne({ email: req.body.email })
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
-        if(!user.verifyEmail){
-             sendEmail(user.email,user.name)
-            return  next(new AppError(`verify email first ..check your gmail`,401))
+        // if(!user.verifyEmail){
+        //      sendEmail(user.email,user.name)
+        //     return  next(new AppError(`verify email first ..check your gmail`,401))
              
-            }
+        //     }
             let token = jwt.sign({ userId: user._id,role:user.role },process.env.JWT_KEY)
             
             await userModel.findOneAndUpdate({email:req.body.email},{isActive:true})

@@ -1,19 +1,12 @@
 import fetch from 'node-fetch';
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://127.0.0.1:5000';
 
 const fetchBookRecommendations = async (bookName) => {
-    const url = `${baseUrl}/recommend`;
-    const requestBody = { book_name: bookName };
+    const url = `${baseUrl}/recommend?book_name=${bookName}`;
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
