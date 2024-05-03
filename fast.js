@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const baseUrl = 'http://127.0.0.1:5000';
+const baseUrl = 'https://4273-102-41-222-94.ngrok-free.app';
 
 const fetchBookRecommendations = async (bookName) => {
     const url = `${baseUrl}/recommend?book_name=${bookName}`;
