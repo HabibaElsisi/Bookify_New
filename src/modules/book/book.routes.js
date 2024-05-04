@@ -18,6 +18,6 @@ bookRouter.route("/:id")
     .get(validation(paramsIdVal),getSingleBook)
     .put(protectedRoutes,allowedTo("admin"),uploadSingleFile("imgCover"),validation(updateBookVal),updateBook)
     .delete(protectedRoutes,allowedTo("admin"),validation(paramsIdVal),deleteBook)
-bookRouter.get("/getLoggedInSingleBook/:id",validation(paramsIdVal),protectedRoutes,allowedTo("user"),userStatus,getLoggedInSingleBook)
+// bookRouter.get("/getLoggedInSingleBook/:id",validation(paramsIdVal),protectedRoutes,allowedTo("user"),userStatus,getLoggedInSingleBook)
 
 export default bookRouter
