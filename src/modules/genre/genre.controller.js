@@ -5,16 +5,26 @@ import { genreModel } from "../../../database/models/genre.model.js"
 import { AppError } from "../../utils/AppError.js"
 import { deleteOne } from "../handlers/handle.js"
 import { ApiFeature } from "../../utils/apiFeatures.js"
+import {v2 as cloudinary} from 'cloudinary';     
+cloudinary.config({ 
+    cloud_name: 'dw0ah4b0d', 
+    api_key: '113396713524483', 
+    api_secret: '0IE803ol080f-DYFKmAiMtP9i3g' 
+  });
 
 
 const addGenre=catchError(async(req,res,next)=>{
     let isGenreExists=await genreModel.findOne({name:req.body.name})
     if(isGenreExists)return next(new AppError(`this Genre already exists`,404))
-    req.body.image=req.file.filename
     req.body.slug=slugify(req.body.name)
-    let genre=new genreModel(req.body)
-    await genre.save()
-    res.json({message:"Genre added successfully",genre})
+    await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+        req.body.image=result.secure_url
+        let genre=new genreModel(req.body)
+        await genre.save()
+        res.json({message:"Genre added successfully",genre})
+    
+    
+       });
 })
 
 const getAllGenres=catchError(async(req,res,next)=>{
@@ -38,7 +48,9 @@ const updateGenre=catchError(async(req,res,next)=>{
         if(isGenreExists)return next(new AppError(`this genre already exists`,404))
     }
      if(req.file){ 
-        req.body.image=req.file.filename
+         await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+            req.body.image=result.secure_url
+           });
      }
 
    

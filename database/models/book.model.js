@@ -54,14 +54,14 @@ const schema = new mongoose.Schema({
     }
 
 }, {timestamps:true,toJSON:{virtuals:true}})
-schema.post("init",function(doc){
-    if(doc.imgCover){
-    doc.imgCover=process.env.baseURL+"uploads/"+ doc.imgCover
-    }
-})
-schema.post("save",function(){
-    this.imgCover=process.env.baseURL+"uploads/"+ this.imgCover
-})
+// schema.post("init",function(doc){
+//     if(doc.imgCover){
+//     doc.imgCover=process.env.baseURL+"uploads/"+ doc.imgCover
+//     }
+// })
+// schema.post("save",function(){
+//     this.imgCover=process.env.baseURL+"uploads/"+ this.imgCover
+// })
 
 schema.virtual("myReviews",{
     ref:"review",

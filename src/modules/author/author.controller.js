@@ -3,15 +3,25 @@ import { catchError } from "../../middleware/catchError.js"
 import { AppError } from "../../utils/AppError.js"
 import { ApiFeature } from "../../utils/apiFeatures.js"
 import { deleteOne } from "../handlers/handle.js"
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+    cloud_name: 'dw0ah4b0d', 
+    api_key: '113396713524483', 
+    api_secret: '0IE803ol080f-DYFKmAiMtP9i3g' 
+  });
+
 
 const addAuthor=catchError(async(req,res,next)=>{
 let isAuthorExists=await authorModel.findOne({name:req.body.name})
 if(isAuthorExists)return next(new AppError(`this author already exists`,404))
-    req.body.image=req.file.filename
    req.body.addedBy=req.user._id
-    let author= new authorModel(req.body)
+    await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+        req.body.image=result.secure_url
+        let author= new authorModel(req.body)
     await author.save()
     res.json({message:"author added successfully",author})
+       });
    })
 
 const getAllAuthors=catchError(async(req,res,next)=>{
@@ -27,7 +37,10 @@ const updateAuthors=catchError(async(req,res,next)=>{
     if(!author) return next(new AppError("author not found",401))
    // if(!(req.user._id.toString()==author.addedBy.toString()))return next(new AppError(`you are not allowed to update this author`,401))
     if(req.file){
-        req.body.image=req.file.filename
+       await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+            req.body.image=result.secure_url
+        
+           });
     }
     if(req.body.name)
     {

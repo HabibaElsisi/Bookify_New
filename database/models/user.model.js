@@ -50,15 +50,15 @@ Schema.post("findOneAndUpdate",function(){
     this._update.password=bcrypt.hashSync(this._update.password,8)
     
   }
-  if(this._update.image){
-    this._update.image=process.env.baseURL +"uploads/"+ this._update.image
-  }
+//   if(this._update.image){
+//     this._update.image=process.env.baseURL +"uploads/"+ this._update.image
+//   }
 })
-Schema.post("init",function(doc){
-    if(doc.image){
-    doc.image=process.env.baseURL +"uploads/"+ doc.image
-    }
-})
+// Schema.post("init",function(doc){
+//     if(doc.image){
+//     doc.image=process.env.baseURL +"uploads/"+ doc.image
+//     }
+// })
 
 export const userModel = mongoose.model("user", Schema);
 

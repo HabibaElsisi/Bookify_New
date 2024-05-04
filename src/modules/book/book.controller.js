@@ -12,15 +12,13 @@ import { userModel } from "../../../database/models/user.model.js"
 import { historyModel } from "../../../database/models/history.model.js"
 import { reviewModel } from "../../../database/models/review.model.js"
 import { fetchBookRecommendations } from "../../../fast.js"
-
-
-
-
-
-
-
-
-
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+    cloud_name: 'dw0ah4b0d', 
+    api_key: '113396713524483', 
+    api_secret: '0IE803ol080f-DYFKmAiMtP9i3g' 
+  });
 
 const addBook=catchError(async(req,res,next)=>{
     let authorExists=await authorModel.findById(req.body.author)
@@ -30,12 +28,20 @@ const addBook=catchError(async(req,res,next)=>{
     let isBookExists=await bookModel.findOne({title:req.body.title})
     if(isBookExists)return next(new AppError(`this Book already exists`,404))
 
-    req.body.imgCover=req.file.filename
-
+    
+    // req.body.imgCover=req.file.filename
     req.body.slug=slugify(req.body.title)
+   await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+    req.body.imgCover=result.secure_url
     let book=new bookModel(req.body)
     await book.save()
     res.json({message:"Book added successfully",book})
+
+   });
+
+
+   
+   
 })
 
 const getAllBooks = catchError(async (req, res, next) => {
@@ -116,7 +122,9 @@ const updateBook=catchError(async(req,res,next)=>{
         if(isBookExists)return next(new AppError(`this book already exists`,404))
     }
     if(req.file){
-        req.body.imgCover=req.file.filename
+       await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
+            req.body.imgCover=result.secure_url
+           });
     }
         
     let book= await bookModel.findByIdAndUpdate(req.params.id,req.body,{new:true})

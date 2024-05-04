@@ -3,14 +3,7 @@ import mongoose from "mongoose"
 import { AppError } from "../../utils/AppError.js";
 
 export const fileUpload = () => {
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, "uploads/");
-        },
-        filename: (req, file, cb) => {
-            cb(null, new mongoose.Types.ObjectId() + "-" + file.originalname);
-        },
-    });
+    const storage = multer.diskStorage({});
 
     function fileFilter(req, file, cb) {
         if (file.mimetype.startsWith("image")) {

@@ -25,15 +25,15 @@ schema.virtual("mybooks",{
     foreignField:"author",
     ref:"book"
 })
-schema.post("init",function(doc){
-    if(doc.image){
-    doc.image=process.env.baseURL +"uploads/"+ doc.image
-    }
-})
-schema.post("save",function(){
-    this.image=process.env.baseURL +"uploads/"+ this.image
-})
-schema.post("findOneAndUpdate",function(){
-    this._update.image=process.env.baseURL +"uploads/"+ this._update.image
-})
+// schema.post("init",function(doc){
+//     if(doc.image){
+//     doc.image=process.env.baseURL +"uploads/"+ doc.image
+//     }
+// })
+// schema.post("save",function(){
+//     this.image=process.env.baseURL +"uploads/"+ this.image
+// })
+// schema.post("findOneAndUpdate",function(){
+//     this._update.image=process.env.baseURL +"uploads/"+ this._update.image
+// })
 export const authorModel = mongoose.model('author', schema)
