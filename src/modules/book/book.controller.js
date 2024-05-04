@@ -139,41 +139,41 @@ const updateBook=catchError(async(req,res,next)=>{
 
 
 
-// const getLoggedInSingleBook=async(req,res,next)=>{
+const getLoggedInSingleBook=async(req,res,next)=>{
 
-//     let book= await bookModel.findById(req.params.id).populate({
-//         path: 'author',
-//         select: 'name brief -_id'
-//     });
-//     if(!book) return next(new AppError(`this Book not found`,404))
-//     let reviews= await reviewModel.find({book:req.params.id})
-//     if(!reviews)  res.json({message:"success",book})
-//     let rate = 0;
-//     for (let i = 0; i < reviews.length; i++) {
-//         rate =i+1
-//     }
-//     let rateMid=[]
-//     for (let i = 0; i < reviews.length; i++) {
-//         rateMid.push(reviews[i].rate)
+    let book= await bookModel.findById(req.params.id).populate({
+        path: 'author',
+        select: 'name brief -_id'
+    });
+    if(!book) return next(new AppError(`this Book not found`,404))
+    let reviews= await reviewModel.find({book:req.params.id})
+    if(!reviews)  res.json({message:"success",book})
+    let rate = 0;
+    for (let i = 0; i < reviews.length; i++) {
+        rate =i+1
+    }
+    let rateMid=[]
+    for (let i = 0; i < reviews.length; i++) {
+        rateMid.push(reviews[i].rate)
         
-//     }
-//     let numberOfRate=0
-//     let rateMinValues=0
-//     for(let i=0; i<rateMid.length; i++){
-//         numberOfRate=i+1
-//         rateMinValues +=rateMid[i]
-//     }
-//     if(!numberOfRate==0){
-//         book.rateAvg=rateMinValues/numberOfRate
+    }
+    let numberOfRate=0
+    let rateMinValues=0
+    for(let i=0; i<rateMid.length; i++){
+        numberOfRate=i+1
+        rateMinValues +=rateMid[i]
+    }
+    if(!numberOfRate==0){
+        book.rateAvg=rateMinValues/numberOfRate
 
-//     }
+    }
    
-//     book.rateCount=rate
-//     res.json({message:"success",book})
+    book.rateCount=rate
+    res.json({message:"success",book})
 
 
 
-// }
+}
 
 const deleteBook=deleteOne(bookModel)
 
@@ -184,6 +184,6 @@ export {
     getSingleBook,
     updateBook,
     deleteBook,
-    // getLoggedInSingleBook,
+    getLoggedInSingleBook,
     
 }

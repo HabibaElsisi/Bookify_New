@@ -33,11 +33,11 @@ const Schema= new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:"book"
     }],
-    // status: {
-    //     type: String,
-    //     enum: ["not_read", "reading", "read"],
-    //     default: "not_read"
-    // }
+    status: {
+        type: String,
+        enum: ["not_read", "reading", "read"],
+        default: "not_read"
+    }
 
 },{timestamps:true})
 
