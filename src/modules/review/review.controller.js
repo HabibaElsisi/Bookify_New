@@ -9,7 +9,7 @@ const addReview=catchError(async(req,res,next)=>{
     let userStatus=await userModel.findById(req.user._id)
     if(userStatus.status=="not_read"||userStatus.status=="reading")return next(new AppError(`you will not be able to add review finsh the book first`,404))
     req.body.user=req.user._id
-    let isReviewExists=await reviewModel.findOne({user:req.user._id,product:req.body.product})
+    let isReviewExists=await reviewModel.findOne({user:req.user._id,book:req.body.book})
     if(isReviewExists) return next (new AppError('you added review before on this book',404))
     let review=new reviewModel(req.body)
     await review.save()
