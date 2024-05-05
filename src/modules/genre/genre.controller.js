@@ -34,6 +34,11 @@ const getAllGenres=catchError(async(req,res,next)=>{
     res.json({message:"this is all Genres",page:apiFeature.pageNumber,genre})
 
 })
+const getAllGenresToSelect=catchError(async(req,res,next)=>{
+    let genres= await genreModel.find().select("name image _id")
+    res.json({message:"this is all Genres",genres})
+
+})
 const getSingleGenre=catchError(async(req,res,next)=>{
     let genre= await genreModel.findById(req.params.id)
     if(!genre) return next(new AppError(`this genre not found`,404))
@@ -68,5 +73,6 @@ export {
     getAllGenres,
     getSingleGenre,
     updateGenre,
-    deleteGenre
+    deleteGenre,
+    getAllGenresToSelect
 }

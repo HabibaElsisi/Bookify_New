@@ -32,6 +32,12 @@ const getAllAuthors=catchError(async(req,res,next)=>{
     res.json({message:"this is all authors",page:apiFeature.pageNumber,authors})
 })
 
+const getAllAuthorsToSelect=catchError(async(req,res,next)=>{
+    let authors=await authorModel.find().select("name brief _id") 
+    res.json({message:"this is all authors",authors})
+
+})
+
 const updateAuthors=catchError(async(req,res,next)=>{
     let author= await authorModel.findById(req.params.id)
     if(!author) return next(new AppError("author not found",401))
@@ -64,5 +70,6 @@ export {
     getAllAuthors,
     updateAuthors,
     deleteAuthor,
-    getSingleAuthor
+    getSingleAuthor,
+    getAllAuthorsToSelect
 }

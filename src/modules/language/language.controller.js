@@ -18,6 +18,11 @@ const getAllLanguages=catchError(async(req,res,next)=>{
     res.json({message:"this is all languages",languages,page:apifeature.pageNumber})
 })
 
+const getAllLanguageToSelect = catchError(async (req, res, next) => {
+    let languages = await languageModel.find().select('language _id');
+    res.json({ message: "These are all languages", languages });
+});
+
 
 
 const deleteLanguage=deleteOne(languageModel)
@@ -25,5 +30,6 @@ const deleteLanguage=deleteOne(languageModel)
 export {
     addLanguage,
     deleteLanguage,
-    getAllLanguages
+    getAllLanguages,
+    getAllLanguageToSelect
 }
