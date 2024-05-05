@@ -58,18 +58,40 @@ const getAllBooks = catchError(async (req, res, next) => {
     
     let books = await apiFeature.mongooseQuery;
 
-    let recommendedBooks = [];
     if (req.query.keyword) {
         let bookName = req.query.keyword;
-        recommendedBooks = await fetchBookRecommendations(bookName);
+        let booksFromDb = await bookModel.find({ title: { $regex: bookName } });
+        let recommendedBooks = await fetchBookRecommendations(bookName);
 
-        let recommendedBooksFromDB = await bookModel.find({ title: { $in: recommendedBooks.map(book => book.title) } });
-        let booksNotInRecommended = books.filter(book => !recommendedBooks.map(recBook => recBook.title).includes(book.title));
-        books = recommendedBooksFromDB.concat(booksNotInRecommended);
+        let recommendedBookTitles = recommendedBooks.map(book => book.title);
+        let recommendedBooksFromDb = await bookModel.find({ title: { $in: recommendedBookTitles } });
+
+        if (!recommendedBooksFromDb) return res.json({ message: "These are books", books });
+
+        // Update the priority of recommended books in the database
+        for (let i = 0; i < recommendedBooksFromDb.length; i++) {
+            let book = await bookModel.findOneAndUpdate({ _id: recommendedBooksFromDb[i]._id }, { priority: i+1 });
+            await book.save();
+        }
+
+        return res.json({ 
+            message: "These are books",
+            books: booksFromDb,
+            recommendedForYou: recommendedBooksFromDb 
+        });
     }
 
-    return res.json({ message: "These are all Books", page: apiFeature.pageNumber, books });
+
+
+    let getAllRecommendedBooks = await bookModel.find({ priority: { $exists: true } });
+    await bookModel.updateMany({ priority: { $exists: true } }, { $unset: { priority: "" } });
+
+    if (getAllRecommendedBooks.length == 0) return res.json({ message: "These are all Books", page: apiFeature.pageNumber, books });
+
+     return res.json({ message: "These are all Books", page: apiFeature.pageNumber, books, recommendedForYou: getAllRecommendedBooks });
 });
+
+
 
 
 

@@ -51,6 +51,9 @@ const schema = new mongoose.Schema({
     author:{
         type:mongoose.Types.ObjectId,
         ref:"author"
+    },
+    priority:{
+        type:Number
     }
 
 }, {timestamps:true,toJSON:{virtuals:true}})
