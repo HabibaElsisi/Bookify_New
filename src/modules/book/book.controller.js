@@ -11,7 +11,7 @@ import { authorModel } from "../../../database/models/author.model.js"
 import { userModel } from "../../../database/models/user.model.js"
 import { historyModel } from "../../../database/models/history.model.js"
 import { reviewModel } from "../../../database/models/review.model.js"
-import { fetchBookRecommendations } from "../../../flask.js"
+import { fetchBookRecommendations } from "../../../fast.js"
 import {v2 as cloudinary} from 'cloudinary';
           
 cloudinary.config({ 
