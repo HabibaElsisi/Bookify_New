@@ -41,6 +41,7 @@ const updateInfoVal=joi.object({
 })
 const updateStatusVal=joi.object({
     status:joi.string().valid("not_read","reading","read").required(),
+    id:joi.string().hex().length(24).required()
 })
 
 

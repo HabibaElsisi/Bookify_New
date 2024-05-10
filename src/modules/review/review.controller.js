@@ -1,4 +1,5 @@
 import { reviewModel } from "../../../database/models/review.model.js"
+import { statusModel } from "../../../database/models/status.model.js"
 import { userModel } from "../../../database/models/user.model.js"
 import { catchError } from "../../middleware/catchError.js"
 import { AppError } from "../../utils/AppError.js"
@@ -6,8 +7,13 @@ import { ApiFeature } from "../../utils/apiFeatures.js"
 
 
 const addReview=catchError(async(req,res,next)=>{
-    let userStatus=await userModel.findById(req.user._id)
-    if(userStatus.status=="not_read"||userStatus.status=="reading")return next(new AppError(`you will not be able to add review finsh the book first`,404))
+  let userStatus = await statusModel.findOne({ user: req.user._id, book: req.body.book });
+
+  if (!userStatus || userStatus.status !== "read") {
+      return next(new AppError("You cannot add a review until you finish reading the book", 404));
+  }
+
+
     req.body.user=req.user._id
     let isReviewExists=await reviewModel.findOne({user:req.user._id,book:req.body.book})
     if(isReviewExists) return next (new AppError('you added review before on this book',404))

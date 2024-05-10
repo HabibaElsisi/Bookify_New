@@ -9,6 +9,7 @@ import { sendEmail } from "../../services/email/sendEmail.js"
 import { userModel } from "../../../database/models/user.model.js"
 import Randomstring from "randomstring"
 import { sendOTPEmail } from "../../services/OTPCode/sendOTP_InEmail.js"
+import { statusModel } from "../../../database/models/status.model.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
@@ -105,11 +106,25 @@ const updateInfo=catchError(async(req,res,next)=>{
     res.status(200).json({message:"your  info updated successfully",updateInfo})
 
 })
-const updateStatus=catchError(async(req,res,next)=>{
-    await userModel.findByIdAndUpdate(req.user._id,{status:req.body.status},{new:true})
-    res.json({message:"your status updated successfully"})
-})
+// const updateStatus=catchError(async(req,res,next)=>{
+//     await userModel.findByIdAndUpdate(req.user._id,{status:req.body.status},{new:true})
+//     res.json({message:"your status updated successfully"})
+// })
 
+
+const updateStatus=async(req,res,next)=>{
+    let isExist= await statusModel.find({user:req.user._id,book:req.params.id})
+    if(isExist.length>0){
+        await statusModel.findOneAndUpdate({book:req.params.id,user:req.user._id},{status:req.body.status},{new:true})
+    }
+    else{
+        let status=new statusModel({status:req.body.status,user:req.user._id,book:req.params.id})
+        await status.save() 
+    }
+    
+    await userModel.findByIdAndUpdate({_id:req.user._id},{status:req.body.status},{new:true})
+    res.json({message:"your status updated successfully"})
+}
 
 
 

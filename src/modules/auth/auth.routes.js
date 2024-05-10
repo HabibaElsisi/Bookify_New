@@ -16,6 +16,6 @@ authRouter.delete("/deleteAccount",protectedRoutes,allowedTo("user"),deleteAccou
 authRouter.patch("/forgetPassword",validation(forgetPasswordVal),forgetPassword)
 authRouter.patch("/resetPassword",validation(resetPasswordVal),resetPassword)
 authRouter.put("/updateInfo",protectedRoutes,allowedTo("user"),validation(updateInfoVal),updateInfo)
-authRouter.patch("/updateStatus",protectedRoutes,allowedTo("user"),validation(updateStatusVal),updateStatus)
+authRouter.patch("/updateStatus/:id",protectedRoutes,allowedTo("user"),validation(updateStatusVal),updateStatus)
 
 export default authRouter
