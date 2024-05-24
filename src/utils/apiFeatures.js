@@ -5,21 +5,25 @@ export class ApiFeature{
 
     }
     pagination(){
+        let pageLimit=10
+        if(this.searchQuery.limit){
+            pageLimit=this.searchQuery.limit
+        }
         if( this.searchQuery.page<=0)  this.searchQuery.page=1
         let pageNumber =  this.searchQuery.page*1||1
-        let pageLimit=10
+        
         let skip=(pageNumber-1)*pageLimit
         this.pageNumber=pageNumber
         this.mongooseQuery.skip(skip).limit(pageLimit)
         return this
-    }
+    }
     filter(){
         let filterObj={...this.searchQuery}
 
-    let excludedFields=["page","sort","fields","keyword"]
+    let excludedFields=["page","sort","fields","keyword","limit"]
     excludedFields.forEach((val)=>{
         delete filterObj[val]
-    })
+   })
 
     console.log(filterObj);
     filterObj=JSON.stringify(filterObj)
