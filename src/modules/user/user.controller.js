@@ -23,7 +23,7 @@ const getAllUsers=catchError(async(req,res,next)=>{
 
 
 const getSingleUser=catchError(async(req,res,next)=>{
-    let user=await userModel.findById(req.params.id)
+    let user=await userModel.findById(req.params.id).populate("wishlist")
     if(!user)return next(new AppError(`this user not found`,404))
     res.json({message:"this is user",user})
 
