@@ -5,7 +5,8 @@ const addToWishlistVal=joi.object({
 
 
 const paramsIdVal=joi.object({
-    id:joi.string().hex().length(24).required()
+    id:joi.string().hex().length(24).required(),
+    userId:joi.string().hex().length(24)
 })
 
 const updateWishlistVal=joi.object({

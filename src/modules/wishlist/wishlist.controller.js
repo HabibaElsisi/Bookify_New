@@ -16,9 +16,18 @@ const addToWishlist=catchError(async(req,res,next)=>{
 const removeFromWishlist=catchError(async(req,res,next)=>{
     let book=await bookModel.findById(req.params.id)
     if(!book) return next(new AppError(`this book not found`,404))
+    if(req.user.role !== "admin"){
     let wishlist=await userModel.findByIdAndUpdate(req.user._id,{$pull:{wishlist:req.params.id}},{new:true}).populate("wishlist")
     if(!wishlist)return next(new AppError(`this user not found`,404))
     res.json({message:"book removed successfully from wishlist",wishlist:wishlist.wishlist})
+    }else{
+    let userExists=await userModel.findById(req.body.userId)
+    if(!userExists)return next(new AppError(`user not found`,404))
+    let wishlist=await userModel.findByIdAndUpdate(req.body.userId,{$pull:{wishlist:req.params.id}},{new:true}).populate("wishlist")
+    if(!wishlist)return next(new AppError(`this user not found`,404))
+    res.json({message:"book removed successfully from wishlist",wishlist:wishlist.wishlist})
+
+    }
 })
 
 
