@@ -10,6 +10,7 @@ import { userModel } from "../../../database/models/user.model.js"
 import Randomstring from "randomstring"
 import { sendOTPEmail } from "../../services/OTPCode/sendOTP_InEmail.js"
 import { statusModel } from "../../../database/models/status.model.js"
+import { historyModel } from "../../../database/models/history.model.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
@@ -123,6 +124,12 @@ const updateStatus=async(req,res,next)=>{
     }
     
     await userModel.findByIdAndUpdate({_id:req.user._id},{status:req.body.status},{new:true})
+    let history = new historyModel({
+        userId: req.user._id,
+        action: req.body.status,
+        bookId: req.params.id
+    });
+    await history.save();
     res.json({message:"your status updated successfully"})
 }
 
