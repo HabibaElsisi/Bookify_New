@@ -2,7 +2,7 @@ import joi from "joi"
 
 const addAuthorVal=joi.object({
     name:joi.string().trim().required().min(2).max(50),
-    brief:joi.string().trim().required().min(20).max(1500),
+    brief:joi.string().trim().required().min(20).max(2500),
     image:joi.object({
         fieldname:joi.string().required(),
         originalname:joi.string().required(),
@@ -18,7 +18,7 @@ const addAuthorVal=joi.object({
 const updateAuthorVal=joi.object({
     id:joi.string().hex().length(24).required(),
     name:joi.string().trim().min(2).max(50),
-    brief:joi.string().trim().min(20).max(1500),
+    brief:joi.string().trim().min(20).max(2500),
     image:joi.object({
         fieldname:joi.string(),
         originalname:joi.string(),

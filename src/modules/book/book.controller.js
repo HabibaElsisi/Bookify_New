@@ -29,7 +29,7 @@ const addBook=catchError(async(req,res,next)=>{
     if(isBookExists)return next(new AppError(`this Book already exists`,404))
 
     
-    // req.body.imgCover=req.file.filename
+    
     req.body.slug=slugify(req.body.title)
    await cloudinary.uploader.upload(req.file.path,async (error, result) =>{
     req.body.imgCover=result.secure_url
@@ -80,8 +80,6 @@ const getAllBooks = catchError(async (req, res, next) => {
             recommendedForYou: recommendedBooksFromDb 
         });
     }
-
-
 
     let getAllRecommendedBooks = await bookModel.find({ priority: { $exists: true } });
     await bookModel.updateMany({ priority: { $exists: true } }, { $unset: { priority: "" } });

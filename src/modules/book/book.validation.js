@@ -3,7 +3,7 @@ import joi from "joi"
 
 const addBookVal=joi.object({
     title:joi.string().trim().required().min(2).max(300),
-    description:joi.string().trim().required().min(10).max(1500),
+    description:joi.string().trim().required().min(10).max(2500),
 
     image:joi.object({
         fieldname:joi.string().required(),
@@ -31,7 +31,7 @@ const updateBookVal=joi.object({
     id:joi.string().hex().length(24).required(),
 
     title:joi.string().trim().min(2).max(300),
-    description:joi.string().trim().min(10).max(1500),
+    description:joi.string().trim().min(10).max(2500),
 
     image:joi.object({
         fieldname:joi.string(),
