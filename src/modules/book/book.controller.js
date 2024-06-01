@@ -89,7 +89,26 @@ const getAllBooks = catchError(async (req, res, next) => {
      return res.json({ message: "These are all Books", page: apiFeature.pageNumber, books, recommendedForYou: getAllRecommendedBooks });
 });
 
+ async function RecommendTrack(bookName) {
 
+
+        let booksFromDb = await bookModel.find({ title: { $regex: bookName } });
+        let recommendedBooks = await fetchBookRecommendations(bookName);
+
+        let recommendedBookTitles = recommendedBooks.map(book => book.title);
+        let recommendedBooksFromDb = await bookModel.find({ title: { $in: recommendedBookTitles } });
+
+        if (!recommendedBooksFromDb) return res.json({ message: "These are books", books });
+
+        // Update the priority of recommended books in the database
+        for (let i = 0; i < recommendedBooksFromDb.length; i++) {
+            let book = await bookModel.findOneAndUpdate({ _id: recommendedBooksFromDb[i]._id }, { priority: i+1 });
+            await book.save();
+        }
+
+
+    
+ }
 
 
 
@@ -100,6 +119,8 @@ const getSingleBook=catchError(async(req,res,next)=>{
         select: 'name brief -_id'
     });
     if(!book) return next(new AppError(`this Book not found`,404))
+    RecommendTrack(book.title)
+
     let reviews= await reviewModel.find({book:req.params.id})
     if(!reviews)  res.json({message:"success",book})
     let rate = 0;
