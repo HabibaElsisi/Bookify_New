@@ -133,6 +133,15 @@ const updateStatus=async(req,res,next)=>{
     res.json({message:"your status updated successfully"})
 }
 
+const getInfo=catchError(async(req,res,next)=>{
+    let user=await userModel.findById(req.user._id)
+    let userName=user.name
+    let userEmail=user.email
+    let userAge=user.age
+    res.json({message:"this is your info",userName,userEmail,userAge})
+    
+})
+
 
 
 
@@ -148,5 +157,6 @@ export{
     forgetPassword,
     resetPassword,
     updateInfo,
-    updateStatus
+    updateStatus,
+    getInfo
 }
