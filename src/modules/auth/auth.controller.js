@@ -135,10 +135,11 @@ const updateStatus=async(req,res,next)=>{
 
 const getInfo=catchError(async(req,res,next)=>{
     let user=await userModel.findById(req.user._id)
+    let userId=user.id
     let userName=user.name
     let userEmail=user.email
     let userAge=user.age
-    res.json({message:"this is your info",userName,userEmail,userAge})
+    res.json({message:"this is your info",userId,userName,userEmail,userAge})
     
 })
 
