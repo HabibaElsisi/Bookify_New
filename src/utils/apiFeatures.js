@@ -48,17 +48,19 @@ export class ApiFeature{
         }
         return this
     }
-    search(){
-        if(this.searchQuery.keyword){ 
-            this.mongooseQuery.find({$or:[
-                {title:{$regex:this.searchQuery.keyword}},
-                {description:{$regex:this.searchQuery.keyword}},
-                {name:{$regex:this.searchQuery.keyword}},
-                {slug:{$regex:this.searchQuery.keyword}},
-
-
-            ]})
+    search() {
+        if (this.searchQuery.keyword) {
+            const keyword = this.searchQuery.keyword;
+            this.mongooseQuery.find({
+                $or: [
+                    { title: { $regex: keyword, $options: 'i' } },
+                    { description: { $regex: keyword, $options: 'i' } },
+                    { name: { $regex: keyword, $options: 'i' } },
+                    { slug: { $regex: keyword, $options: 'i' } }
+                ]
+            });
         }
-        return this
+        return this;
     }
+    
 }

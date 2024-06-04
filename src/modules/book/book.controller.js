@@ -60,7 +60,7 @@ const getAllBooks = catchError(async (req, res, next) => {
 
     if (req.query.keyword) {
         let bookName = req.query.keyword;
-        let booksFromDb = await bookModel.find({ title: { $regex: bookName } });
+        let booksFromDb = await bookModel.find({ title: { $regex: bookName ,$options: 'i' } });
         let recommendedBooks = await fetchBookRecommendations(bookName);
 
         let recommendedBookTitles = recommendedBooks.map(book => book.title);
