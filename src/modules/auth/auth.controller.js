@@ -14,7 +14,7 @@ import { historyModel } from "../../../database/models/history.model.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
-    // await  sendEmail(req.body.email,req.body.name)
+     await  sendEmail(req.body.email,req.body.name)
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
     res.json({message:"signUp successfully",token})
 })
@@ -22,11 +22,11 @@ const signUp=catchError(async(req,res,next)=>{
 const signin = catchError(async (req, res,next) => {
     let user = await userModel.findOne({ email: req.body.email })
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
-        //  if(!user.verifyEmail){
-        //      await sendEmail(user.email,user.name)
-        //      return  next(new AppError(`verify email first ..check your gmail`,401))
+         if(!user.verifyEmail){
+             await sendEmail(user.email,user.name)
+             return  next(new AppError(`verify email first ..check your gmail`,401))
              
-        //      }
+             }
             let token = jwt.sign({ userId: user._id,role:user.role },process.env.JWT_KEY)
             let role=user.role
             await userModel.findOneAndUpdate({email:req.body.email},{isActive:true})
