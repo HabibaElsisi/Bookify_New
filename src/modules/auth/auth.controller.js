@@ -54,8 +54,8 @@ const changePassword=async(req,res,next)=>{
         return next(new AppError(`wrong password`,404))
     }
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
-
-    await userModel.findByIdAndUpdate(req.user._id,{password:req.body.newPassword,passwordChangedAt:Date.now()},{new:true})
+    let hashPass=bcrypt.hashSync(req.body.newPassword,8)
+    await userModel.findByIdAndUpdate(req.user._id,{password:hashPass,passwordChangedAt:Date.now()},{new:true})
     res.json({message:"Password changed successfully",token})
 
 }
