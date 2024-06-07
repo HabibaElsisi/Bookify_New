@@ -14,7 +14,7 @@ import { historyModel } from "../../../database/models/history.model.js"
 const signUp=catchError(async(req,res,next)=>{
     let user=new userModel(req.body)
     await user.save()
-    //  await  sendEmail(req.body.email,req.body.name)
+      await  sendEmail(req.body.email,req.body.name)
     let token=jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
     res.json({message:"signUp successfully",token})
 })
